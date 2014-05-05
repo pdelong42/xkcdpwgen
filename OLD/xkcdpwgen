@@ -3,8 +3,7 @@
 import random, math
 
 def normalform(w):
-    w = w.strip()
-    return w.split("'")[0].lower()
+    return w.strip().split("'")[0].lower()
 
 def readwords(fname):
     return open(fname, "r").readlines()
