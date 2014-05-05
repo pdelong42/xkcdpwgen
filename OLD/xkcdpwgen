@@ -5,12 +5,12 @@ import random, math
 def normalform(w):
     return w.strip().split("'")[0].lower()
 
-def readwords(fname):
-    return open(fname, "r").readlines()
+def readwords():
+    return open("/usr/share/dict/words", "r").readlines()
 
 def makebylen():
     bylen = dict()
-    for w in readwords("/usr/share/dict/words"):
+    for w in readwords():
         w = normalform(w)
         l = len(w)
         if not bylen.has_key(l):
