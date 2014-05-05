@@ -1,7 +1,6 @@
 (ns xkcdpwgen.core
    (:require [clojure.string :refer [lower-case split trim]])
-   (:gen-class)
-)
+   (:gen-class))
 
 ; For "bits", I'm emulating the behaviour of the original Python code.  I'm not
 ; yet sure why he chose to do it that way, but the code the author wrote
@@ -13,16 +12,12 @@
    (if
       (< n 2)
       0
-      (+ 1 (bits (/ n 2)))
-   )
-)
+      (+ 1 (bits (/ n 2)))))
 
 (defn normalform [w]
-   (lower-case (first (split (trim w) #"'")))
-)
+   (lower-case (first (split (trim w) #"'"))))
 
 (defn -main
    "I don't do a whole lot ... yet."
    [& args]
-   (println "Hello, World!")
-)
+   (println "Hello, World!"))
