@@ -30,6 +30,11 @@
 (defn readwords []
    (split-lines (slurp "/usr/share/dict/words")))
 
+(defn makebylen []
+   (map
+      #()
+      (readwords)))
+
 ;def makebylen():
 ;    bylen = dict()
 ;    for w in readwords():
