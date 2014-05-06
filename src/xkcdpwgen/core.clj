@@ -33,7 +33,9 @@
 (defn makebylen []
    (map
       #()
-      (readwords)))
+      (map
+         normalform
+         (readwords))))
 
 ;def makebylen():
 ;    bylen = dict()
