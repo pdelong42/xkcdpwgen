@@ -27,7 +27,7 @@
 ; handle it (preferably something idiomatic to Clojure).  Figuring-out a way to
 ; test this is going to be interesting.
 
-(defn readwords []
+(defn usrdictwords []
    (split-lines (slurp "/usr/share/dict/words")))
 
 (defn makebylen
