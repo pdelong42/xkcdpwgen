@@ -18,7 +18,7 @@
    (if
       (< n 2)
       0
-      (+ 1 (bits (/ n 2)))))
+      (+ 1 (bits (bit-shift-right n 1)))))
 
 (defn normalform [w]
    (lower-case (first (split (trim w) #"'"))))
@@ -36,6 +36,17 @@
       #(merge-with into % {(count %2) [%2]})
       {}
       (map normalform words)))
+
+(defn password
+   [words nwords maxwordlen]
+)
+
+;def password(words, nwords, maxwordlen):
+;    reslist = list()
+;    fmtstr = "%%-%ds" % maxwordlen
+;    while len(reslist) < nwords:
+;        reslist.append(fmtstr % random.sample(words, 1)[0])
+;    return ' '.join(reslist)
 
 (defn -main
    "I don't do a whole lot ... yet."
