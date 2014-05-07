@@ -18,3 +18,5 @@
 
 (deftest makebylen-1 (testing "makebylen1" (is (= {3, ["foo" "bar"], 5 ["fubar"]} (makebylen '("foo" "bar" "fubar"))))))
 (deftest makebylen-2 (testing "makebylen2" (is (= {3, ["foo" "bar"], 5 ["fubar"]} (makebylen '(foo bar fubar))))))
+
+; ToDo: (password ...)
