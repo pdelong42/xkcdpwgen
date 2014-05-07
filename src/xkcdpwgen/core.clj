@@ -30,21 +30,12 @@
 (defn readwords []
    (split-lines (slurp "/usr/share/dict/words")))
 
-(defn makebylen [words]
+(defn makebylen
+   [words]
    (reduce
-      #(merge-with into % {(count %2) %2})
+      #(merge-with into % {(count %2) [%2]})
       {}
       (map normalform words)))
-
-;def makebylen():
-;    bylen = dict()
-;    for w in readwords():
-;        w = normalform(w)
-;        l = len(w)
-;        if not bylen.has_key(l):
-;            bylen[l] = dict()
-;        bylen[l][w] = 1
-;    return bylen
 
 (defn -main
    "I don't do a whole lot ... yet."

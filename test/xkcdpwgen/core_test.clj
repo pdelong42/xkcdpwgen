@@ -15,3 +15,6 @@
 (deftest normal-2 (testing "normal2" (is (= "here" (normalform "Here's another test")))))
 (deftest normal-3 (testing "normal3" (is (= "and another" (normalform "   AND another")))))
 (deftest normal-4 (testing "normal4" (is (= "" (normalform "'I wonder what this will do")))))
+
+(deftest makebylen-1 (testing "makebylen1" (is (= {3, ["foo" "bar"], 5 ["fubar"]} (makebylen '("foo" "bar" "fubar"))))))
+(deftest makebylen-2 (testing "makebylen2" (is (= {3, ["foo" "bar"], 5 ["fubar"]} (makebylen '(foo bar fubar))))))
