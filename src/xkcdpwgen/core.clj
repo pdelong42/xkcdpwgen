@@ -1,5 +1,5 @@
 (ns xkcdpwgen.core
-   (:require [clojure.string :refer [lower-case split split-lines trim]])
+   (:require [clojure.string :refer [join lower-case split split-lines trim]])
    (:gen-class))
 
 ; For "bits", I'm emulating the behaviour of the original Python code.  I'm not
@@ -35,18 +35,14 @@
       {}
       (map normalform words)))
 
-;def password(words, nwords, maxwordlen):
-;    def format(word):
-;        fmtstr = "%%-%ds" % maxwordlen
-;        return fmtstr % word
-;    return ' '.join( map( format, random.sample( words, int( nwords ) ) ) )
+; ToDo: write tests for this function
 
 (defn password
    [words nwords maxwordlen]
-;   (take nwords
-;      ...
-;   )
-)
+   (join " "
+      (map
+         #(format (format "%%-%ds" maxwordlen) %)
+         (take nwords (shuffle words)))))
 
 (defn -main
    "I don't do a whole lot ... yet."
