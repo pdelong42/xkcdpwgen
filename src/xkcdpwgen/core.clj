@@ -31,11 +31,10 @@
    (split-lines (slurp "/usr/share/dict/words")))
 
 (defn makebylen []
-   (map
-      #()
-      (map
-         normalform
-         (readwords))))
+   (reduce
+      #(merge-with into % {(count %2) %2})
+      {}
+      (map normalform (readwords))))
 
 ;def makebylen():
 ;    bylen = dict()
