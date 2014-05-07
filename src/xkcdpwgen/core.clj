@@ -19,7 +19,11 @@
 
 ; Let's just hardcode the dictionary path until I can think of a better way to
 ; handle it (preferably something idiomatic to Clojure).  Figuring-out a way to
-; test this is going to be interesting.
+; test this is going to be interesting.  Update: Instead of this being a
+; standalone function, I'll just insert its body as the arg to (makebylen ...),
+; when I ultimately call that from (-main ...).  Problem solved.  Maybe there I
+; can even provide for an optional command-line arg to supply a replacement for
+; the dictionary file.
 
 (defn usrdictwords []
    (split-lines (slurp "/usr/share/dict/words")))
@@ -31,16 +35,18 @@
       {}
       (map normalform words)))
 
+;def password(words, nwords, maxwordlen):
+;    def format(word):
+;        fmtstr = "%%-%ds" % maxwordlen
+;        return fmtstr % word
+;    return ' '.join( map( format, random.sample( words, int( nwords ) ) ) )
+
 (defn password
    [words nwords maxwordlen]
+;   (take nwords
+;      ...
+;   )
 )
-
-;def password(words, nwords, maxwordlen):
-;    reslist = list()
-;    fmtstr = "%%-%ds" % maxwordlen
-;    while len(reslist) < nwords:
-;        reslist.append(fmtstr % random.sample(words, 1)[0])
-;    return ' '.join(reslist)
 
 (defn -main
    "I don't do a whole lot ... yet."
