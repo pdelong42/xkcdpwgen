@@ -19,11 +19,10 @@ def makebylen():
     return bylen
 
 def password(words, nwords, maxwordlen):
-    reslist = list()
-    fmtstr = "%%-%ds" % maxwordlen
-    while len(reslist) < nwords:
-        reslist.append(fmtstr % random.sample(words, 1)[0])
-    return ' '.join(reslist)
+    def format(word):
+        fmtstr = "%%-%ds" % maxwordlen
+        return fmtstr % word
+    return ' '.join( map( format, random.sample( words, int( nwords ) ) ) )
 
 def bits(n):
     bits = 0
