@@ -8,12 +8,6 @@
 ; number.  Maybe he had a good reason for this; maybe I'll adopt the other
 ; convention at a later time.
 
-; It drives me nuts that I do division here, when I'd rather just be shifting
-; 'n' one bit to the right (much less taxing than division).  However, I don't
-; yet know how to do bit twiddling in Clojure.  There's a part of me that just
-; wants to do ln(n)/ln(2) and call it a day, but doing a logarithm is even more
-; taxing than division.
-
 (defn bits [n]
    (if
       (< n 2)
