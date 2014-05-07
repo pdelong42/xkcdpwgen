@@ -76,8 +76,5 @@ It defaults to 44 bits of entropy as per the cartoon.
 
     (options, args) = parser.parse_args()
 
-    bl = makebylen()
-    for pw in passwords(bl, options.bitsentropy, options.numtogen):
+    for pw in passwords( makebylen(), options.bitsentropy, options.numtogen ):
         print pw
-
-
