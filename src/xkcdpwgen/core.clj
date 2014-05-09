@@ -44,19 +44,22 @@
          #(format (format "%%-%ds" maxwordlen) %)
          (take nwords (shuffle words)))))
 
-;def passwords(bylen, bitsentropy, count):
-;    result = list()
-;    words = list()
+(defn passwords
+   [bylen bitsentropy count]
+   (
+)
+
+;def passwords( bylen, bitsentropy, count ):
 ;
-;    maxwordlen = 11
-;    for wordlen in xrange(3, maxwordlen+1):
-;        words.extend(bylen[wordlen].keys())
-;    wordbits = bits(len(words))
-;    nwords = math.ceil(float(bitsentropy) / float(wordbits))
-;    print "Final wordlist contains", len(words), "words.  Picking", nwords, "words provides at least", wordbits*nwords, "bits of entropy."
-;    for x in xrange(0, count):
-;        result.append(password(words, nwords, maxwordlen))
-;    return result
+;    maxwordlen = 30 # footnote 1 #
+;    words = reduce( lambda x, wordlen: x + bylen[ wordlen ].keys(), bylen.keys(), [] )
+;    wordbits = bits( len( words ) )
+;    nwords = math.ceil( float( bitsentropy ) / float( wordbits ) )
+;
+;    print "Final wordlist contains %d words.  Picking %d words provides at least %f bits of entropy." \
+;        % ( len( words ), nwords, wordbits * nwords )
+;
+;    return map( lambda ignore: password( words, nwords, maxwordlen ), xrange( 0, count ) )
 
 (defn -main
    "I don't do a whole lot ... yet."
