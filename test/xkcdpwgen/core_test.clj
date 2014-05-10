@@ -17,4 +17,7 @@
 (deftest makebylen-1 (testing "makebylen1" (is (= {3, ["foo" "bar"], 5 ["fubar"]} (makebylen '("foo" "bar" "fubar"))))))
 (deftest makebylen-2 (testing "makebylen2" (is (= {3, ["foo" "bar"], 5 ["fubar"]} (makebylen '(foo bar fubar))))))
 
-; ToDo: (password ...)
+(deftest password-1 (testing "password1" (is (= "foo"   (password ["foo"] 1 3)))))
+(deftest password-2 (testing "password2" (is (= "foo"   (password ["foo"] 2 3)))))
+(deftest password-3 (testing "password3" (is (= "foo  " (password ["foo"] 1 5)))))
+(deftest password-4 (testing "password4" (is (some #(= % (password ["foo" "bar"] 2 3)) '("foo bar" "bar foo")))))
