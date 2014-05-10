@@ -1,5 +1,7 @@
 (ns xkcdpwgen.core
-   (:require [clojure.string :refer [join lower-case split split-lines trim]])
+   (:require
+      [clojure.string :refer [join lower-case split split-lines trim]]
+      [clojure.tools.cli :refer [parse-opts]] )
    (:gen-class))
 
 ; For "bits", I'm emulating the behaviour of the original Python code.  I'm not
