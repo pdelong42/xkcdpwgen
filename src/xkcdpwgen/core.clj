@@ -17,17 +17,6 @@
 (defn normalform [w]
    (lower-case (first (split (trim w) #"'"))))
 
-; Let's just hardcode the dictionary path until I can think of a better way to
-; handle it (preferably something idiomatic to Clojure).  Figuring-out a way to
-; test this is going to be interesting.  Update: Instead of this being a
-; standalone function, I'll just insert its body as the arg to (makebylen ...),
-; when I ultimately call that from (-main ...).  Problem solved.  Maybe there I
-; can even provide for an optional command-line arg to supply a replacement for
-; the dictionary file.
-
-(defn usrdictwords []
-   (split-lines (slurp "/usr/share/dict/words")))
-
 (defn makebylen
    [words]
    (reduce
@@ -71,6 +60,17 @@
 ;        % ( len( words ), nwords, wordbits * nwords )
 ;
 ;    return map( lambda ignore: password( words, nwords, maxwordlen ), xrange( 0, count ) )
+
+; Let's just hardcode the dictionary path until I can think of a better way to
+; handle it (preferably something idiomatic to Clojure).  Figuring-out a way to
+; test this is going to be interesting.  Update: Instead of this being a
+; standalone function, I'll just insert its body as the arg to (makebylen ...),
+; when I ultimately call that from (-main ...).  Problem solved.  Maybe there I
+; can even provide for an optional command-line arg to supply a replacement for
+; the dictionary file.
+
+(defn usrdictwords []
+   (split-lines (slurp "/usr/share/dict/words")))
 
 (defn -main
    "I don't do a whole lot ... yet."
