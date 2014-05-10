@@ -44,10 +44,21 @@
          #(format (format "%%-%ds" maxwordlen) %)
          (take nwords (shuffle words)))))
 
+; ToDo: write tests for this function
+
 (defn passwords
-   [bylen bitsentropy count]
-   (
-)
+   [bylen bitsentropy n]
+   (let
+      [  maxwordlen 30
+         words (reduce into (vals bylen))
+         wc (count words)
+         wordbits (bits wc)
+         nwords (float (/ bitsentropy wordbits))
+      ]
+      (printf "Final wordlist contains %d words.  Picking %d words provides at least %f bits of entropy." wc nwords (* wordbits nwords))
+      (map
+         #(password words nwords maxwordlen)
+         (range count))))
 
 ;def passwords( bylen, bitsentropy, count ):
 ;
