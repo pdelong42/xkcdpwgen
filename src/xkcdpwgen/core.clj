@@ -24,8 +24,6 @@
       {}
       (map normalform words)))
 
-; ToDo: write tests for this function
-
 (defn password
    [words nwords maxwordlen]
    (join " "
@@ -48,18 +46,6 @@
       (map
          #(password words nwords maxwordlen)
          (range count))))
-
-;def passwords( bylen, bitsentropy, count ):
-;
-;    maxwordlen = 30 # footnote 1 #
-;    words = reduce( lambda x, wordlen: x + bylen[ wordlen ].keys(), bylen.keys(), [] )
-;    wordbits = bits( len( words ) )
-;    nwords = math.ceil( float( bitsentropy ) / float( wordbits ) )
-;
-;    print "Final wordlist contains %d words.  Picking %d words provides at least %f bits of entropy." \
-;        % ( len( words ), nwords, wordbits * nwords )
-;
-;    return map( lambda ignore: password( words, nwords, maxwordlen ), xrange( 0, count ) )
 
 ; Let's just hardcode the dictionary path until I can think of a better way to
 ; handle it (preferably something idiomatic to Clojure).  Figuring-out a way to
