@@ -1,6 +1,7 @@
 (ns xkcdpwgen.core
    (:require
-      [clojure.string :refer [join lower-case split split-lines trim]]
+      [clojure.pprint    :refer [pprint]]
+      [clojure.string    :refer [join lower-case split split-lines trim]]
       [clojure.tools.cli :refer [parse-opts]] )
    (:gen-class))
 
@@ -30,7 +31,7 @@
    [words nwords maxwordlen]
    (join " "
       (map
-         #(format (format "%%-%ds" maxwordlen) %)
+         #(format (format "%%-%ds\n" maxwordlen) %)
          (take nwords (shuffle words)))))
 
 ; ToDo: write tests for this function
@@ -42,25 +43,62 @@
          words (reduce into (vals bylen))
          wc (count words)
          wordbits (bits wc)
-         nwords (float (/ bitsentropy wordbits))
+         nwords (int (/ bitsentropy wordbits)) ; ToDo: this needs to be fixed to round up instead of down
       ]
-      (printf "Final wordlist contains %d words.  Picking %d words provides at least %f bits of entropy." wc nwords (* wordbits nwords))
-      (map
-         #(password words nwords maxwordlen)
-         (range count))))
+      (printf "Final wordlist contains %d words.  Picking %d words provides at least %d bits of entropy." wc nwords (* wordbits nwords))
+      (repeatedly n #(password words nwords maxwordlen))))
 
-; Let's just hardcode the dictionary path until I can think of a better way to
-; handle it (preferably something idiomatic to Clojure).  Figuring-out a way to
-; test this is going to be interesting.  Update: Instead of this being a
-; standalone function, I'll just insert its body as the arg to (makebylen ...),
-; when I ultimately call that from (-main ...).  Problem solved.  Maybe there I
-; can even provide for an optional command-line arg to supply a replacement for
-; the dictionary file.
+(defn usage
+   [options-summary]
+   (join \newline
+      "usage: %prog [options] arg1 arg2"
+      ""
+      "Options:"
+      options-summary
+      ""
+      "See http://xkcd.com/936/"
+      ""
+      "Basic argument is that picking 4 random common words for a password "
+      "gives you about 44 bits of entropy, vs, say 28 bits of entropy for "
+      "a \"strong\" (but patterned to be kinda memorable) random password."
+      ""
+      "xkcdpwgen uses a dictionary to generate a list of words in \"normal\" form, "
+      "and generate candidate passwords as a few random dictionary words in a row."
+      "Given the length of the word list that we're drawing from, we can then"
+      "pick enough words to satisfy given strenght criteria."
+      ""
+      "It defaults to 44 bits of entropy as per the cartoon."))
 
-(defn usrdictwords []
-   (split-lines (slurp "/usr/share/dict/words")))
+(def cli-options
+   [  [  "-b"
+         "--bitsentropy NUM"
+         "generate passwords with at least NUM bits of entropy"
+         :validate [integer? "not an integer"]
+         :default 44 ]
+;     [  "-e"
+;        "--equivalent LEN"
+;        "generate passwords as strong as a string of LEN random printable ascii symbols"
+;        :validate [integer? "not an integer"] ]
+      [  "-f"
+         "--filename PATH"
+         "a full PATH to a file containing a list of words"
+         :default "/usr/share/dict/words"]
+      [  "-n"
+         "--numtogen NUM"
+         "number of candidate passwords to generate"
+         :validate [integer? "not an integer"]
+         :default 20] ] )
+
+; ToDo: test that command-line options get recognized
+
+(defn my-main
+   [  {:keys [options arguments errors summary]}]
+   (map print
+      (passwords
+         (makebylen (split-lines (slurp (:filename options))))
+         (:bitsentropy options)
+         (:numtogen    options))))
 
 (defn -main
-   "I don't do a whole lot ... yet."
    [& args]
-   (println "Hello, World!"))
+   (my-main (parse-opts args cli-options)))
