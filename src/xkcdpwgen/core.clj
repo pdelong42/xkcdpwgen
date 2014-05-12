@@ -34,20 +34,6 @@
          #(format (format "%%-%ds" maxwordlen) %)
          (take nwords (shuffle words)))))
 
-; ToDo: write tests for this function
-
-(defn passwords
-   [bylen bitsentropy n]
-   (let
-      [  maxwordlen 30
-         words (reduce into (vals bylen))
-         wc (count words)
-         wordbits (bits wc)
-         nwords (int (/ bitsentropy wordbits)) ; ToDo: this needs to be fixed to round up instead of down
-      ]
-      (printf "Final wordlist contains %d words.  Picking %d words provides at least %d bits of entropy." wc nwords (* wordbits nwords))
-      (dorun (map println (repeatedly n #(password words nwords maxwordlen))))))
-
 (defn usage
    [options-summary]
    (join \newline
@@ -91,13 +77,30 @@
 
 ; ToDo: test that command-line options get recognized
 
-(defn my-main
+(defn passwords
    [  {:keys [options arguments errors summary]}]
-   (passwords
-      (makebylen (split-lines (slurp (:filename options))))
-      (:bitsentropy options)
-      (:numtogen    options)))
+   (let
+      [  maxwordlen 30 ; ToDo: determine this automatically from width of largest word used
+         words (reduce into (vals (makebylen (split-lines (slurp (:filename options)))))) ; footnote 1
+         wc (count words)
+         wordbits (bits wc)
+         nwords (int (/ (:bitsentropy options) wordbits)) ; ToDo: this needs to be fixed to round up instead of down
+      ]
+      (printf "Final wordlist contains %d words.  Picking %d words provides at least %d bits of entropy." wc nwords (* wordbits nwords))
+      (dorun
+         (map println
+            (repeatedly
+               (:numtogen options)
+              #(password words nwords maxwordlen))))))
 
 (defn -main
    [& args]
-   (my-main (parse-opts args cli-options)))
+   (passwords (parse-opts args cli-options))) ; ToDo: fix this so that a non-existent flag generates an error or a help message
+
+; Footnote 1
+;
+; I'm not sure why things were grouped by word-length in the original
+; implementation, since the author never made use of that.  The only
+; reason I'm preserving it here is because I think I may take
+; advantage of it for more precision.  (Perhaps that's what the
+; original author had in mind too).
