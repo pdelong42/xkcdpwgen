@@ -31,7 +31,7 @@
    [words nwords maxwordlen]
    (join " "
       (map
-         #(format (format "%%-%ds\n" maxwordlen) %)
+         #(format (format "%%-%ds" maxwordlen) %)
          (take nwords (shuffle words)))))
 
 ; ToDo: write tests for this function
@@ -46,7 +46,7 @@
          nwords (int (/ bitsentropy wordbits)) ; ToDo: this needs to be fixed to round up instead of down
       ]
       (printf "Final wordlist contains %d words.  Picking %d words provides at least %d bits of entropy." wc nwords (* wordbits nwords))
-      (repeatedly n #(password words nwords maxwordlen))))
+      (dorun (map println (repeatedly n #(password words nwords maxwordlen))))))
 
 (defn usage
    [options-summary]
@@ -93,11 +93,10 @@
 
 (defn my-main
    [  {:keys [options arguments errors summary]}]
-   (map print
-      (passwords
-         (makebylen (split-lines (slurp (:filename options))))
-         (:bitsentropy options)
-         (:numtogen    options))))
+   (passwords
+      (makebylen (split-lines (slurp (:filename options))))
+      (:bitsentropy options)
+      (:numtogen    options)))
 
 (defn -main
    [& args]
