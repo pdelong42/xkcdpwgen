@@ -86,8 +86,8 @@
          wordbits (bits wc)
          nwords (int (/ (:bitsentropy options) wordbits)) ; ToDo: this needs to be fixed to round up instead of down
       ]
-      (printf "Final wordlist contains %d words.  Picking %d words provides at least %d bits of entropy." wc nwords (* wordbits nwords))
-      (dorun
+      (printf "Final wordlist contains %d words.  Picking %d words provides at least %d bits of entropy.\n" wc nwords (* wordbits nwords))
+      (dorun ; this feels hacky :-/
          (map println
             (repeatedly
                (:numtogen options)
