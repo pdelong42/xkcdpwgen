@@ -79,20 +79,17 @@
 ; ToDo: test that command-line options get recognized
 
 (defn passwords
-   [  {:keys [options arguments errors summary]}]
+   [  {  {:keys [bitsentropy numtogen filename]} :options
+          :keys [arguments errors summary]  }  ]
    (let
       [  maxwordlen 30 ; ToDo: determine this automatically from width of largest word used
-         words (reduce into (vals (makebylen (split-lines (slurp (:filename options)))))) ; footnote 1
+         words (reduce into (vals (makebylen (split-lines (slurp filename))))) ; footnote 1
          wc (count words)
          wordbits (bits wc)
-         nwords (int (ceil (/ (:bitsentropy options) wordbits)))
+         nwords (int (ceil (/ bitsentropy wordbits)))
       ]
       (printf "Final wordlist contains %d words.  Picking %d words provides at least %d bits of entropy.\n" wc nwords (* wordbits nwords))
-      (println
-         (join \newline
-            (repeatedly
-               (:numtogen options)
-              #(password words nwords maxwordlen))))))
+      (println (join \newline (repeatedly numtogen #(password words nwords maxwordlen))))))
 
 (defn -main
    [& args]
