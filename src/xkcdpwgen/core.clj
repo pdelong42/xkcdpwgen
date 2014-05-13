@@ -1,5 +1,6 @@
 (ns xkcdpwgen.core
    (:require
+      [clojure.algo.generic.math-functions :refer [ceil]]
       [clojure.pprint    :refer [pprint]]
       [clojure.string    :refer [join lower-case split split-lines trim]]
       [clojure.tools.cli :refer [parse-opts]] )
@@ -84,7 +85,7 @@
          words (reduce into (vals (makebylen (split-lines (slurp (:filename options)))))) ; footnote 1
          wc (count words)
          wordbits (bits wc)
-         nwords (int (/ (:bitsentropy options) wordbits)) ; ToDo: this needs to be fixed to round up instead of down
+         nwords (int (ceil (/ (:bitsentropy options) wordbits)))
       ]
       (printf "Final wordlist contains %d words.  Picking %d words provides at least %d bits of entropy.\n" wc nwords (* wordbits nwords))
       (println
