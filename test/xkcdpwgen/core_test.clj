@@ -21,3 +21,6 @@
 (deftest password-2 (testing "password2" (is (= "foo"   (password ["foo"] 2 3)))))
 (deftest password-3 (testing "password3" (is (= "foo  " (password ["foo"] 1 5)))))
 (deftest password-4 (testing "password4" (is (some #(= % (password ["foo" "bar"] 2 3)) '("foo bar" "bar foo")))))
+
+; ToDo: test for failure conditions...
+; that is, test things that should fail, to make sure they actually do fail
