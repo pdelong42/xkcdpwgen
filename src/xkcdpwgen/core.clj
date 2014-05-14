@@ -1,9 +1,9 @@
 (ns xkcdpwgen.core
    (:require
       [clojure.algo.generic.math-functions :refer [ceil]]
-      [clojure.pprint    :refer [pprint]]
-      [clojure.string    :refer [join lower-case split split-lines trim]]
-      [clojure.tools.cli :refer [parse-opts]] )
+      [clojure.pprint                      :refer [pprint]]
+      [clojure.string                      :refer [join lower-case split split-lines trim]]
+      [clojure.tools.cli                   :refer [parse-opts]] )
    (:gen-class))
 
 ; For "bits", I'm emulating the behaviour of the original Python code.  I'm not
@@ -82,8 +82,9 @@
    [  {  {:keys [bitsentropy numtogen filename]} :options
           :keys [arguments errors summary]  }  ]
    (let
-      [  maxwordlen 30 ; ToDo: determine this automatically from width of largest word used
-         words (reduce into (vals (makebylen (split-lines (slurp filename))))) ; footnote 1
+      [  bylen (makebylen (split-lines (slurp filename))) ; footnote 1
+         maxwordlen (last (sort (keys bylen))) ; footnote 2
+         words (reduce into (vals bylen))
          wc (count words)
          wordbits (bits wc)
          nwords (int (ceil (/ bitsentropy wordbits)))
@@ -95,10 +96,16 @@
    [& args]
    (passwords (parse-opts args cli-options))) ; ToDo: fix this so that a non-existent flag generates an error or a help message
 
-; Footnote 1
+; Footnote 1:
 ;
 ; I'm not sure why things were grouped by word-length in the original
 ; implementation, since the author never made use of that.  The only
 ; reason I'm preserving it here is because I think I may take
 ; advantage of it for more precision.  (Perhaps that's what the
 ; original author had in mind too).
+;
+; Footnote 2:
+;
+; Well, there's *one* use.  However, I think I'd still like it to only
+; consider the max length of the words displayed, not out of all
+; *possible* words considered.
