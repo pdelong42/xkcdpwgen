@@ -36,51 +36,55 @@
          (take nwords (shuffle words)))))
 
 (defn usage
-   [options-summary]
-   (join \newline
-      "usage: %prog [options] arg1 arg2"
-      ""
-      "Options:"
-      options-summary
-      ""
-      "See http://xkcd.com/936/"
-      ""
-      "Basic argument is that picking 4 random common words for a password "
-      "gives you about 44 bits of entropy, vs, say 28 bits of entropy for "
-      "a \"strong\" (but patterned to be kinda memorable) random password."
-      ""
-      "xkcdpwgen uses a dictionary to generate a list of words in \"normal\" form, "
-      "and generate candidate passwords as a few random dictionary words in a row."
-      "Given the length of the word list that we're drawing from, we can then"
-      "pick enough words to satisfy given strenght criteria."
-      ""
-      "It defaults to 44 bits of entropy as per the cartoon."))
+   [exit-code options-summary]
+   (println
+      (join \newline
+         [  "usage: %prog [options] arg1 arg2"
+            ""
+            "Options:"
+            options-summary
+            ""
+            "See http://xkcd.com/936/"
+            ""
+            "Basic argument is that picking 4 random common words for a password "
+            "gives you about 44 bits of entropy, vs, say 28 bits of entropy for "
+            "a \"strong\" (but patterned to be kinda memorable) random password."
+            ""
+            "xkcdpwgen uses a dictionary to generate a list of words in \"normal\" form, "
+            "and generate candidate passwords as a few random dictionary words in a row."
+            "Given the length of the word list that we're drawing from, we can then"
+            "pick enough words to satisfy given strenght criteria."
+            ""
+            "It defaults to 44 bits of entropy as per the cartoon."  ]  )  )
+   (System/exit exit-code)  )
 
 (def cli-options
    [  [  "-b"
          "--bitsentropy NUM"
          "generate passwords with at least NUM bits of entropy"
          :validate [integer? "not an integer"]
-         :default 44 ]
+         :default 44  ]
 ;     [  "-e"
 ;        "--equivalent LEN"
 ;        "generate passwords as strong as a string of LEN random printable ascii symbols"
-;        :validate [integer? "not an integer"] ]
+;        :validate [integer? "not an integer"]  ]
       [  "-f"
          "--filename PATH"
          "a full PATH to a file containing a list of words"
-         :default "/usr/share/dict/words"]
+         :default "/usr/share/dict/words"  ]
+      [  "-h" "--help"  ]
       [  "-n"
          "--numtogen NUM"
          "number of candidate passwords to generate"
          :validate [integer? "not an integer"]
-         :default 20] ] )
+         :default 20  ]  ]  )
 
 ; ToDo: test that command-line options get recognized
 
 (defn passwords
-   [  {  {:keys [bitsentropy numtogen filename]} :options
+   [  {  {:keys [bitsentropy numtogen filename help]} :options
           :keys [arguments errors summary]  }  ]
+   (if help (usage 0 summary))
    (let
       [  bylen (makebylen (split-lines (slurp filename))) ; footnote 1
          maxwordlen (last (sort (keys bylen))) ; footnote 2
