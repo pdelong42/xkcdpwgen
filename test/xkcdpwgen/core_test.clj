@@ -1,13 +1,14 @@
 (ns xkcdpwgen.core-test
    (:require
       [clojure.test   :refer :all]
-      [xkcdpwgen.core :refer :all]))
+      [xkcdpwgen.core :refer :all]  )  )
 
 (deftest bits-0 (testing "0" (is (= 0 (bits 0)))))
 (deftest bits-1 (testing "1" (is (= 0 (bits 1)))))
 (deftest bits-2 (testing "2" (is (= 1 (bits 2)))))
 (deftest bits-3 (testing "3" (is (= 1 (bits 3)))))
 (deftest bits-4 (testing "4" (is (= 2 (bits 4)))))
+(deftest bits-5 (testing "5" (is (not (= 3 (bits 5))))))
 
 (deftest normalform-1 (testing "normal1" (is (= "this" (normalform "   this   ")))))
 (deftest normalform-2 (testing "normal2" (is (= "here" (normalform "Here's another test")))))
