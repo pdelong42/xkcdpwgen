@@ -36,10 +36,11 @@
          (take nwords (shuffle words)))))
 
 (defn usage
-   [exit-code options-summary]
+   [exit-code options-summary & [error-msg]]
+   (if error-msg (println error-msg "\n"))
    (println
       (join \newline
-         [  "usage: %prog [options] arg1 arg2"
+         [  "usage: xkcdpwgen [options] arg1 arg2"
             ""
             "Options:"
             options-summary
@@ -62,6 +63,7 @@
    [  [  "-b"
          "--bitsentropy NUM"
          "generate passwords with at least NUM bits of entropy"
+         :parse-fn #(Integer/parseInt %)
          :validate [integer? "not an integer"]
          :default 44  ]
 ;     [  "-e"
@@ -72,33 +74,35 @@
          "--filename PATH"
          "a full PATH to a file containing a list of words"
          :default "/usr/share/dict/words"  ]
-      [  "-h" "--help"  ]
+      [  "-h" "--help" "help"  ]
       [  "-n"
          "--numtogen NUM"
          "number of candidate passwords to generate"
+         :parse-fn #(Integer/parseInt %)
          :validate [integer? "not an integer"]
          :default 20  ]  ]  )
 
-; ToDo: test that command-line options get recognized
+; ToDo: write tests that verify whether command-line options get recognized
+; ToDo: handle exception where filename does not exist or can't be read
 
 (defn passwords
    [  {  {:keys [bitsentropy numtogen filename help]} :options
           :keys [arguments errors summary]  }  ]
-   (if help (usage 0 summary))
+   (if help   (usage 0 summary errors))
+   (if errors (usage 1 summary errors))
    (let
       [  bylen (makebylen (split-lines (slurp filename))) ; footnote 1
          maxwordlen (last (sort (keys bylen))) ; footnote 2
          words (reduce into (vals bylen))
          wc (count words)
          wordbits (bits wc)
-         nwords (int (ceil (/ bitsentropy wordbits)))
-      ]
+         nwords (int (ceil (/ bitsentropy wordbits)))  ]
       (printf "Final wordlist contains %d words.  Picking %d words provides at least %d bits of entropy.\n" wc nwords (* wordbits nwords))
       (println (join \newline (repeatedly numtogen #(password words nwords maxwordlen))))))
 
 (defn -main
    [& args]
-   (passwords (parse-opts args cli-options))) ; ToDo: fix this so that a non-existent flag generates an error or a help message
+   (passwords (parse-opts args cli-options)))
 
 ; Footnote 1:
 ;
