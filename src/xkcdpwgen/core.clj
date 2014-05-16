@@ -3,8 +3,31 @@
       [clojure.algo.generic.math-functions :refer [ceil]]
       [clojure.pprint                      :refer [pprint]]
       [clojure.string                      :refer [join lower-case split split-lines trim]]
-      [clojure.tools.cli                   :refer [parse-opts]] )
-   (:gen-class))
+      [clojure.tools.cli                   :refer [parse-opts]]  )
+   (:gen-class)  )
+
+(def cli-options
+   [  [  "-b"
+         "--bitsentropy NUM"
+         "generate passwords with at least NUM bits of entropy"
+         :parse-fn #(Integer/parseInt %)
+         :validate [integer? "not an integer"]
+         :default 44  ]
+;     [  "-e"
+;        "--equivalent LEN"
+;        "generate passwords as strong as a string of LEN random printable ascii symbols"
+;        :validate [integer? "not an integer"]  ]
+      [  "-f"
+         "--filename PATH"
+         "a full PATH to a file containing a list of words"
+         :default "/usr/share/dict/words"  ]
+      [  "-h" "--help" "help"  ]
+      [  "-n"
+         "--numtogen NUM"
+         "number of candidate passwords to generate"
+         :parse-fn #(Integer/parseInt %)
+         :validate [integer? "not an integer"]
+         :default 20  ]  ]  )
 
 ; For "bits", I'm emulating the behaviour of the original Python code.  I'm not
 ; yet sure why he chose to do it that way, but the code the author wrote
@@ -58,29 +81,6 @@
             ""
             "It defaults to 44 bits of entropy as per the cartoon."  ]  )  )
    (System/exit exit-code)  )
-
-(def cli-options
-   [  [  "-b"
-         "--bitsentropy NUM"
-         "generate passwords with at least NUM bits of entropy"
-         :parse-fn #(Integer/parseInt %)
-         :validate [integer? "not an integer"]
-         :default 44  ]
-;     [  "-e"
-;        "--equivalent LEN"
-;        "generate passwords as strong as a string of LEN random printable ascii symbols"
-;        :validate [integer? "not an integer"]  ]
-      [  "-f"
-         "--filename PATH"
-         "a full PATH to a file containing a list of words"
-         :default "/usr/share/dict/words"  ]
-      [  "-h" "--help" "help"  ]
-      [  "-n"
-         "--numtogen NUM"
-         "number of candidate passwords to generate"
-         :parse-fn #(Integer/parseInt %)
-         :validate [integer? "not an integer"]
-         :default 20  ]  ]  )
 
 ; ToDo: write tests that verify whether command-line options get recognized
 ; ToDo: handle exception where filename does not exist or can't be read
