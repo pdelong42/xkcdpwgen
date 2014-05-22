@@ -39,24 +39,24 @@
    (if
       (< n 2)
       0
-      (+ 1 (bits (bit-shift-right n 1)))))
+      (+ 1 (bits (bit-shift-right n 1)))  )  )
 
 (defn normalform [w]
-   (lower-case (first (split (trim w) #"'"))))
+   (lower-case (first (split (trim w) #"'")))  )
 
 (defn makebylen
    [words]
    (reduce
       #(merge-with into % {(count %2) [%2]})
       {}
-      (map normalform words)))
+      (map normalform words)  )  )
 
 (defn password
    [words nwords maxwordlen]
    (join " "
       (map
          #(format (format "%%-%ds" maxwordlen) %)
-         (take nwords (shuffle words)))))
+         (take nwords (shuffle words))  )  )  )
 
 (defn usage
    [exit-code options-summary & [error-msg]]
@@ -98,11 +98,11 @@
          wordbits (bits wc)
          nwords (int (ceil (/ bitsentropy wordbits)))  ]
       (printf "Final wordlist contains %d words.  Picking %d words provides at least %d bits of entropy.\n" wc nwords (* wordbits nwords))
-      (println (join \newline (repeatedly numtogen #(password words nwords maxwordlen))))))
+      (println (join \newline (repeatedly numtogen #(password words nwords maxwordlen))))  )  )
 
 (defn -main
    [& args]
-   (passwords (parse-opts args cli-options)))
+   (passwords (parse-opts args cli-options))  )
 
 ; Footnote 1:
 ;
