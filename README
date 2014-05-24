@@ -1,4 +1,5 @@
 See http://xkcd.com/936/
+See also http://www.explainxkcd.com/wiki/index.php/936:_Password_Strength
 
 Basic argument is that picking 4 random common words for a password gives you
 about 44 bits of entropy, vs, say 28 bits of entropy for a "strong" (but
